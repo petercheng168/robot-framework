@@ -1,0 +1,104 @@
+*** Settings ***
+Library  Selenium2Library
+
+*** Variables ***
+${promotion name for free}  peter-promotion free 100KM
+${Input free KM}  100
+${Input free months}  1
+${promotion name for deuct}  peter-promotion deduct 100$
+${Input dedcut fee}  100
+${Input fee months}  1
+${promotion name for discount}  peter-promotion discount 5%
+${Input discount %}  5
+${Input discount months}  1
+${promotion name for grant}  peter-promotion grant 200 point
+${Input grant point}  200
+${Input grant months}  1
+${promotion name for free maintenance}  peter-promotio free maintenance
+${promotion string1}   促銷方案 存取結果: success
+${promotion string2}   Promotion Save Results: success
+${language1}     繁體中文
+${language2}     ENGLISH
+*** Keywords ***
+#***************************************free promotion*********************************************#
+click addpromotion
+    Click Element    xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[3]/a
+    wait until element is visible  xpath=//*[@id="app"]/div/div/div/div/h2        timeout=10
+    Sleep   2s
+add promotion name1     #新增促銷方案名稱
+    ${numbers}=    Evaluate   random.randint(1000, 9999)    random
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[1]/div[1]/div/input       ${promotion name for free} ${numbers}
+
+add promotion startdate
+    click element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[2]/div/div/div[2]/div/div/input     #點擊startdate 的欄位
+    click element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[2]/div/div/div[2]/div[2]/div/div[2]/div[2]/div[1]/div[4]      #選擇日期20190102
+add promotion enddate
+    click element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[3]/div[1]/div/div[2]/div/div/input       #點擊enddate 的欄位
+    click element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[3]/div[1]/div/div[2]/div[2]/div/div[2]/div[2]/div[5]/div[6]    #選日期20190201
+price info-free     #輸入免費公里的月數
+    click element    xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[1]/div[1]/div/label
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[1]/div[2]/input        ${Input free KM}
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[1]/div[3]/input        ${Input free months}
+save promotion
+    click element    xpath=//*[@id="app"]/div/div/div/div/div/button[1]
+    sleep   5s
+promotion status
+#    ${promotion message}    get text  xpath=/html/body/div/div/div[1]/div/div/div[2]       #擷取儲存結果字串
+#    should be equal as strings    ${promotion string}     ${promotion message}         #比對預設成功與儲存結果字串
+    ${current language}    get text  xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/a      #擷取語系字串
+    ${promotion message}    get text  xpath=/html/body/div/div/div[1]/div/div/div[2]      #擷取儲存結果字串
+    Run Keyword If      '${current language}' == '${language1}'    should be equal as strings   ${promotion string1}    ${promotion message}
+    ...  ELSE   should be equal as strings    ${promotion string2}     ${promotion message}
+close promotion message
+    click element    xpath=/html/body/div/div/div[1]/div/div/div[3]/button
+
+Check add promotion success
+    ${promotionname}     get value    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[1]/div/input
+    sleep  2s
+    click element   xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[4]/a  #Click 編輯方案項目
+    click element   xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select/option[3]    #click 方案類型並選促銷方案
+    sleep  5s
+    Input text     xpath=//*[@id="app"]/div/div/div/div/div[3]/div[1]/input     ${promotionname}
+    sleep  2s
+    click element   xpath=//*[@id="app"]/div/div/div/div/div[3]/div[2]/button
+    sleep  2s
+    wait until element is visible       //*[@id="app"]/div/div/div/div/div[4]   timeout=150
+    ${current promotionname}    get text    xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr/td[2]
+    ${current promotionname}=   Convert to string  ${current promotionname}
+    ${promotionname}=   Convert to string  ${promotionname}
+    should be equal as strings       ${promotionname}    ${current promotionname}
+    Capture page screenshot
+
+#***************************************deduct promotion*******************************************#
+add promotion name2     #新增促銷方案名稱
+    ${numbers}=    Evaluate   random.randint(1000, 9999)    random
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[1]/div[1]/div/input       ${promotion name for deuct} ${numbers}
+price info-deduct       #輸入扣除費用的月數
+    click element    xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[2]/div[1]/div/label
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[2]/div[2]/input        ${Input dedcut fee}
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[2]/div[3]/input        ${Input fee months}
+
+#***************************************discount promotion*****************************************#
+add promotion name3     #新增促銷方案名稱
+    ${numbers}=    Evaluate   random.randint(1000, 9999)    random
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[1]/div[1]/div/input       ${promotion name for discount} ${numbers}
+price info-discount     #輸入折扣%數的月數
+    click element    xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[3]/div[1]/div/label
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[3]/div[2]/input        ${Input discount %}
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[3]/div[3]/input        ${Input discount months}
+
+#***************************************grant promotion********************************************#
+add promotion name4     #新增促銷方案名稱
+    ${numbers}=    Evaluate   random.randint(1000, 9999)    random
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[1]/div[1]/div/input       ${promotion name for grant} ${numbers}
+price info-grant        #輸入發放點數的月數
+    click element    xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[4]/div[1]/div/label
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[4]/div[2]/input        ${Input grant point}
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[4]/div[3]/input        ${Input grant months}
+
+#********************************free regular maintemance promotion********************************#
+add promotion name5     #新增促銷方案名稱
+    ${numbers}=    Evaluate   random.randint(1000, 9999)    random
+    Input text      xpath=//*[@id="app"]/div/div/div/div/form[1]/div[1]/div/input     ${promotion name for free maintenance} ${numbers}
+price info-free maintenance     #免費定期保養
+    click element    xpath=//*[@id="app"]/div/div/div/div/form[2]/div/div/div[5]/div[1]/div/label

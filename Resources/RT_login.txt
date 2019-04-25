@@ -1,0 +1,71 @@
+*** Settings ***
+Library  Selenium2Library
+Library  DateTime
+*** Variables ***
+${language1}     繁體中文
+${language2}     ENGLISH
+*** Keywords ***
+
+login
+    Open Browser    ${URL}  ${BROWSER}
+    Wait Until Element Is Visible    //*[@id='app']/div/div/div/div/div/form/div[1]/input       timeout=1500
+    Maximize Browser Window
+   #找到Gogoro sys test page 的account textbox 並click
+    Wait Until Element Is Visible    xpath=//*[@id='app']/div/div/div/div/div/form/div[1]/input     timeout=1500
+    Click Element    xpath=//*[@id='app']/div/div/div/div/div/form/div[1]/input
+    Sleep    2s
+input ac
+   #輸入account
+    Input Text    xpath=//*[@id='app']/div/div/div/div/div/form/div[1]/input   ${USERNAME}  #輸入account
+input pw
+   #輸入password
+    Input Text    xpath=//*[@id='app']/div/div/div/div/div/form/div[2]/input    ${PASSWORD}   #輸入password
+click btn
+   #點擊 login button 登入並確認web title
+    ${title_1}    Get Title
+    Sleep   2s
+    Click Button     xpath=//*[@id='app']/div/div/div/div/div/form/div[3]/button  #點擊login button
+    Sleep    2s
+    ${title_2}    Get Title
+    should contain    ${title_2}    ${title_1}    #確認web title 是否一致
+   #確認成功進入頁面
+    Wait Until Element Is Visible    xpath=//*[@id="app"]/div/aside/h1
+Select correct language1
+    click element   xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/a       #選擇語言
+    sleep  2s
+    click element   xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/div/button[2]   # 選擇繁體中文
+    #select language1
+Select correct language2
+    click element   xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/a       #選擇語言
+    sleep  2s
+    click element   xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/div/button[1]   # 選擇English
+    #select language1
+Click language combobox
+    ${current language}    get text  xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/a      #擷取語系字串
+    should be equal as strings    ${current language}     ${language1}             #比對預設成功與儲存結果字串
+#    ${right} = should be equal as strings    ${current language}     ${language1}           #比對預設成功與儲存結果字串
+#    Run Keyword If      '${current language}' == '${language1}'      Select correct language2
+#    Run Keyword If      '${current language}' == '${language2}'      Select correct language1
+#    ...  ELSE   Select correct language2
+
+    [tags]  select language (default is traditional chinese)
+
+#login
+#    Wait Until Element Is Visible  //*[@id="app"]/div/div/div/div/div/form
+#
+#   #找到Gogoro sys test page 的account textbox 並click
+#    Wait Until Element Is Visible    xpath=//*[@id='app']/div/div/div/div/div/form/div[1]/input
+#    Click Element    xpath=//*[@id='app']/div/div/div/div/div/form/div[1]/input
+#    Sleep    2s
+#   #輸入account
+#    Input Text    xpath=//*[@id='app']/div/div/div/div/div/form/div[1]/input   billing_admin@gogoro.com  #輸入account
+#   #輸入password
+#    Input Text    xpath=//*[@id='app']/div/div/div/div/div/form/div[2]/input    123   #輸入password
+#   #點擊 login button 登入並確認web title
+#    ${title_1}    Get Title
+#    Click Button     xpath=//*[@id='app']/div/div/div/div/div/form/div[3]/button  #點擊login button
+#    Sleep    2s
+#    ${title_2}    Get Title
+#    should contain    ${title_2}    ${title_1}    #確認web title 是否一致
+#   #確認成功進入頁面
+#    Wait Until Element Is Visible    xpath=//*[@id='app']/div/div/aside

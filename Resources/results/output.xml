@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.0.4 (Python 3.7.1 on win32)" generated="20181025 18:27:27.021">
+<suite id="s1" name="Testcase" source="C:\Users\peter.yf.cheng\PycharmProjects\Catalog_Manager_test\Usecase\Resources\testcase.txt">
+<test id="s1-t1" name="test01">
+<kw name="logintest">
+<msg timestamp="20181025 18:27:27.081" level="FAIL">No keyword with name 'logintest' found.</msg>
+<status status="FAIL" starttime="20181025 18:27:27.080" endtime="20181025 18:27:27.081"></status>
+</kw>
+<status status="FAIL" starttime="20181025 18:27:27.079" endtime="20181025 18:27:27.081" critical="yes">No keyword with name 'logintest' found.</status>
+</test>
+<status status="FAIL" starttime="20181025 18:27:27.041" endtime="20181025 18:27:27.081"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1">Critical Tests</stat>
+<stat pass="0" fail="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="1" id="s1" name="Testcase">Testcase</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20181025 18:27:27.079" level="ERROR">Error in file 'C:\Users\peter.yf.cheng\PycharmProjects\Catalog_Manager_test\Usecase\Resources\testcase.txt': Resource file 'Resources\testflow.txt' does not exist.</msg>
+</errors>
+</robot>

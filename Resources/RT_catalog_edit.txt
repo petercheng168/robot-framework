@@ -1,0 +1,118 @@
+*** Settings ***
+Library  Selenium2Library
+*** Variables ***
+${edit plan status default1}    Published    #已發佈
+${edit plan status default2}    Unpublished  #未發佈
+
+*** Keywords ***
+Scroll Page To Location
+    [Arguments]    ${x_location}    ${y_location}
+    Execute JavaScript    window.scrollTo(${x_location},${y_location})
+
+click edit
+    Click Element    xpath=//*[@id="app"]/div/div/aside/nav/ul/ul[1]/a[4]
+    Sleep   2s
+#***************************************select plan to edit***********************************************#
+select edit-plan1   #確認資費方案全部項目
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select     #點擊產品類型
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select/option[1]       #選擇資費方案
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[3]/div[2]/button
+    sleep  2s
+#    wait until element is visible    xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/table/tbody/tr[1]/td[4]    timeout=1500
+# dev-env
+
+    #等待元件(element)顯示才進行下個動作 [timeout]  時間150秒
+    Wait until element is visible    xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr[1]      timeout=150
+    ${edit plan status1}     get text  //*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr[1]/td[5]
+
+    ${edit plan status default1}=   Convert to string  ${edit plan status default1}
+    ${edit plan status1}=  Convert to string  ${edit plan status1}
+    ${edit plan status default2}=   Convert to string  ${edit plan status default2}
+    #轉換為字符串
+#    ${result1}  run keyword and return status  should be equal as strings  ${edit plan status default1}  ${edit plan status1}
+
+        Run Keyword If      '${edit plan status1}' == '${edit plan status default1}'    Scroll Page To Location    0    300
+    ...     ELSE IF   ' ${edit plan status1}' == ' ${edit plan status default2}'      Scroll Page To Location    0    1200
+    #擷取狀態字串並比對
+    sleep   2s
+#
+#    ${edit plan status1}     get text   xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr[3]/td[5]
+#    Run Keyword If     '${edit plan status1}' == '${edit plan status default2}'     log  success
+#    ...     ELSE   '${edit plan status1}' == '${edit plan status default1}'     Scroll Page To Location    0    2200
+#    #擷取狀態字串並比對
+#    sleep   2s
+
+select edit-plan2   #確認資費方案已發佈項目
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select     #點擊產品類型
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select/option[1]       #選擇資費方案
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[2]/div[1]/select      #選擇搜尋項目
+    sleep   2s
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[2]/div[1]/select/option[2]    #選擇已發佈
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[3]/div[2]/button
+    sleep  2s
+    wait until element is visible    xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr[1]/td[5]    timeout=1500
+    #等待元件(element)顯示才進行下個動作 [timeout]  時間150秒
+
+    ${edit plan status1}     get text   xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr[1]/td[5]
+    Run Keyword If     '${edit plan status1}' == '${edit plan status default1}'     Scroll Page To Location    0    300
+    ...     ELSE   '${edit plan status1}' == '${edit plan status default2}'     Scroll Page To Location    0    1200
+    #擷取狀態字串並比對
+
+    ${edit plan status1}     get text   xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr[3]/td[5]
+    Run Keyword If     '${edit plan status1}' == '${edit plan status default1}'     log  success
+    ...     ELSE   '${edit plan status1}' == '${edit plan status default1}'     Scroll Page To Location    0    2200
+    #擷取狀態字串並比對
+    sleep   2s
+
+select edit-plan3   #確認資費方案未發佈項目
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select     #點擊產品類型
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select/option[1]       #選擇資費方案
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[2]/div[1]/select      #選擇搜尋項目
+    sleep   2s
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[2]/div[1]/select/option[3]    #選擇未發佈
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[3]/div[2]/button
+    sleep  10s
+#    wait until element is visible    xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/table/tbody/tr[1]/td[4]    timeout=1500
+    wait until element is visible    xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr[1]    timeout=150
+    #等待元件(element)顯示才進行下個動作 [timeout]  時間150秒
+
+    ${edit plan status1}     get text   xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr[1]/td[5]
+    Run Keyword If     '${edit plan status1}' == '${edit plan status default2}'     Scroll Page To Location    0    300
+    ...     ELSE   '${edit plan status1}' == '${edit plan status default2}'     Scroll Page To Location    0    1200
+    #擷取狀態字串並比對
+
+    ${edit plan status1}     get text   xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr[3]/td[5]
+    Run Keyword If     '${edit plan status1}' == '${edit plan status default2}'     log  success
+    ...     ELSE   '${edit plan status1}' == '${edit plan status default1}'     Scroll Page To Location    0    2200
+    #擷取狀態字串並比對
+    sleep   2s
+
+#    ...  Else  ${edit plan status1}== ${edit plan status default2}
+#    ...  Else   Scroll Page To Location    0    8200
+
+#    ${edit plan status2}     get text   xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/table/tbody/tr[2]/td[4]
+#    should be equal as strings    ${edit plan status default1}     ${edit plan status1}
+#
+#    else
+#    Scroll Page To Location    0       200
+#    sleep   2s
+#    ${edit plan status1}     get text   xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/table/tbody/tr[1]/td[4]
+#    should be equal as strings    ${edit plan status default1}     ${edit plan status1}
+#    ${edit plan status2}     get text   xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/table/tbody/tr[2]/td[4]
+#    should be equal as strings    ${edit plan status default1}     ${edit plan status1}
+
+#***************************************select addon to edit*********************************************#
+select edit-addon
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select/option[2]
+
+
+#***************************************select promotion to edit*****************************************#
+select edit-promotion
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select/option[3]
+
+#***************************************select all to edit***********************************************#
+select edit-all
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select/option[4]

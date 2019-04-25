@@ -1,0 +1,31 @@
+*** Settings ***
+Library  Selenium2Library
+#Resource  ../Regression-basic_test/Resources/RT_login.txt
+### Test steps
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_login.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_plan.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_addon.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_promotion.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_edit.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_dynamic.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_unitprice.txt
+
+*** Variables ***
+#${URL}  http://10.6.1.48:8080/login     #dev-env
+${URL}  http://pa-billing2.gogoro.com
+${BROWSER}  chrome
+#${USERNAME}  dev.billing_admin@gogoro.com    #dev-account
+${USERNAME}   pa.billing_admin@gogoro.com
+${PASSWORD}  123
+
+*** Keywords ***
+#頁面登入測試
+logintest       #登入功能 role:admin
+    login
+    input ac
+    input pw
+    click btn
+    Click language combobox
+
+#new report
+#    [Arguments]    ${newrule}

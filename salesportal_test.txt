@@ -1,0 +1,72 @@
+*** Settings ***
+Library  Selenium2Library
+Library  Process
+Library  OperatingSystem
+Library  String
+*** Variables ***
+#${URL}  http://10.6.1.48:8080/login     #dev-env
+${URL}  https://pa-sales.gogoro.com/tw/order/scooter     #pa-env
+${BROWSER}  chrome
+#${USERNAME}  dev.billing_admin@gogoro.com    #dev-account
+${USERNAME}   pa.sales_portal_store_sales_a@gogoro.com    #pa-account
+${PASSWORD}  123
+${Account}  peter.yf.cheng@gogoro.com
+${x_location}   0
+${y_location}   2000
+*** Keywords ***
+open
+    Open Browser    ${URL}  ${BROWSER}
+Fillintext
+    Input text  //*[@id="UserID"]   ${USERNAME}
+    Input text  //*[@id="Password"]     ${PASSWORD}
+click loginbtn
+    click element   //*[@id="root"]/form/div/div/button
+    sleep  2s
+order
+    click element   //*[@id="root"]/form/div/div[1]/a[1]/div
+    sleep  1s
+    click element   //*[@id="root"]/div[3]/form/div[2]/div/div/div/div[2]/button[3]
+    sleep  2s
+    Input text  //*[@id="userEmail"]    ${Account}
+    sleep  2s
+    click element   //html/body/div[2]/div/div[2]/div/div[2]/div[2]/div/button[2]
+    sleep  5s
+#    Wait Until Element Is Visible   //*[@id="root"]/div[3]/div[1]/header/div/div/h1/span[2]      timeout=1500
+    #我的購物清單
+    click element   //*[@id="root"]/div[3]/div[1]/div/div/div[2]/div/div[2]/button
+    sleep   2s
+    #訂購資料
+    click element    //*[@id="root"]/div[3]/div[2]/div/div/form/header/div/div/div/span/label/span[2]
+    click element   //*[@id="root"]/div[3]/div[2]/div/div/form/div[4]/div[1]/div/div/div/span/label/span[2]
+    Execute JavaScript    window.scrollTo(${x_location},${y_location})
+    click element   //*[@id="root"]/div[3]/div[2]/div/div/div/div/div[2]/button
+    sleep   2s
+    ##補助領牌資料
+    #選擇縣市
+    click element    //html/body/div[1]/div[3]/div[3]/div/div/form/div[1]/div/div[2]/div/div[2]/div[1]/div[3]/div[2]/div[1]/div/div  #點擊combobox
+    click element    //html/body/div[2]/div/div/div/ul/li[2]    #4=桃園市, 5=新竹市
+    sleep  2s
+    #我已確認並知悉補助相關條件限制，並將於交車前備妥文件，以免補助權益受損
+    wait until element is visible   //*[@id="root"]/div[3]/div[3]/div/div/form/div[1]/div/div[2]/div/div[2]/div[2]/div/div/span/label/span
+    click element   //*[@id="root"]/div[3]/div[3]/div/div/form/div[1]/div/div[2]/div/div[2]/div[2]/div/div/span/label/span
+    #同意
+    click element   //html/body/div[1]/div[3]/div[3]/div/div/form/div[2]/div/div[2]/div/div[1]/div/div/div/span/div/label[1]/span[2]
+    sleep   2s
+    #同意 close
+    click element   //html/body/div[3]/div/div[2]/div/div[2]/button/span/i
+    sleep   2s
+    #是
+    click element   //html/body/div[1]/div[3]/div[3]/div/div/form/div[2]/div/div[2]/div/div[8]/div/div/div/span/div/div[1]/label/span[2]
+    Execute JavaScript    window.scrollTo(${x_location},${y_location})
+    #繼續
+    click element   //*[@id="root"]/div[3]/div[3]/div/div/div/div/div[2]/button
+
+    #付款資料
+
+
+*** Test Cases ***
+login
+    open
+    Fillintext
+    click loginbtn
+    order

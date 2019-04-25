@@ -1,0 +1,100 @@
+*** Settings ***
+#Resource  ../Regression-basic_test/Resources/RT_loginflow.txt
+#Resource  ../Regression-basic_test/Resources/RT_testflowaddplan.txt
+#Resource  ../Regression-basic_test/Resources/RT_testflowaddon.txt
+#Resource  ../Regression-basic_test/Resources/RT_testflowpromotion.txt
+#Resource  ../Regression-basic_test/Resources/RT_testflowedit.txt
+#Resource  ../Regression-basic_test/Resources/RT_testflowdynamic.txt
+#Resource  ../Regression-basic_test/Resources/RT_testflowuniprice.txt
+Library  Selenium2Library
+Library  Process
+Library  OperatingSystem
+Library  String
+Library  SeleniumScreenshots
+
+###### Test flow
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_loginflow.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_testflowaddplan.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_testflowaddon.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_testflowpromotion.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_testflowedit.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_testflowdynamic.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_testflowuniprice.txt
+
+#### Test steps
+#Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_login.txt
+#Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_plan.txt
+#Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_addon.txt
+#Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_promotion.txt
+#Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_edit.txt
+#Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_dynamic.txt
+#Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_unitprice.txt
+*** Variables ***
+#${URL}  http://10.6.1.48:8080/login     #dev-env
+${URL}  http://pa-billing2.gogoro.com     #pa-env
+${BROWSER}  chrome
+#${USERNAME}  dev.billing_admin@gogoro.com    #dev-account
+${USERNAME}   pa.billing_admin@gogoro.com       #pa-account
+${PASSWORD}  123
+${language1}     繁體中文
+${language2}     ENGLISH
+*** Keywords ***
+
+*** Test Cases ***
+RT_testcase01
+    logintest
+    sleep   2s
+    [Tags]  Login function test
+RT_testcase02-1  #正向 新增1199 3Y 的資費並確認成功新建立的方案
+    add plan
+    sleep   2s
+    [Tags]  Create 1199 3Y 資費
+RT_testcase02-2  #正向 新增1199 2Y 的資費並確認成功新建立的方案
+    add plan2
+    sleep   2s
+    [Tags]  Create 1199 2Y 資費
+RT_testcase02-3  #正向 新增1199 3M 的資費並確認成功新建立的方案
+    add plan3
+    sleep   2s
+    [Tags]  Create 1199 3M 資費
+RT_testcase03-1  #正向 新增addon 附加方案 249
+    addaddon
+    sleep  2s
+    [Tags]  Create addon 附加方案 249
+RT_testcase04-1  #正向 新增promotion 促銷方案 每月免費100 KM
+    add promotion1
+    sleep   2s
+    [Tags]  Create promotion free 每月免費100 KM
+RT_testcase04-2  #正向 新增promotion 促銷方案 每月扣除100元
+    add promotion2
+    sleep   2s
+    [Tags]  Create promotion deduct 每月扣除100元
+RT_testcase04-3  #正向 新增promotion 促銷方案 每月折扣5%
+    add promotion3
+    sleep   2s
+    [Tags]  Create promotion discount 每月折扣5%
+RT_testcase04-4  #正向 新增promotion 促銷方案 每月發放100點
+    add promotion4
+    sleep   2s
+    [Tags]  Create promotion grant 每月發放100點
+RT_testcase04-5  #正向 新增promotion 促銷方案 每月免費定期保養
+    add promotion5
+    sleep   2s
+    [Tags]  Create promotion free regular maintemance 每月免費定期保養
+#
+#
+#test12  #正向 檢視plan編輯項目
+#    select edit-plan Criteria
+#    sleep   2s
+#    [Tags]  Edit plan 搜尋資費項目 (全部,已發佈,未發佈)
+
+#test13   #正向 設定動態費率
+##    logintest
+#    sleep   2s
+#    set dynamic
+#    dynamic success
+#    [Tags]  Dynamic success
+#    [Teardown]    Close All Browsers
+#test14
+#    dynamic success
+#    [Tags]  Dynamic success

@@ -1,0 +1,59 @@
+*** Settings ***
+Library  Selenium2Library
+*** Variables ***
+${addon name}  peter-sport249
+${Price249}    249
+#${addon string}   資費方案 存取結果: success
+#${addon string}   資費方案 存取結果: success         #dev-env
+${addon string1}   加值服務 存取結果: success   #pa-env <--- 中文
+${addon string2}   Add-on Save Results: success     #pa-env <--- 英文
+${language1}     繁體中文
+${language2}     ENGLISH
+*** Keywords ***
+
+click addaddon
+    Click Element    xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[2]/a     #點擊建立加值服務
+    wait until element is visible    xpath=//*[@id="app"]/div/div/div/div/h2   timeout=15
+    sleep   2s
+add addon name      #輸入附加方案名稱
+    ${numbers}=    Evaluate   random.randint(1000, 9999)    random
+    Input text   xpath=//*[@id="app"]/div/div/div/div/div[1]/div/input     ${addon name} ${numbers}
+    sleep   2s
+select addon startdate      #選擇附加方案開始日期
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[2]/div/div/div[2]/div/div/input       #點擊startdate 的欄位
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div[2]/div[1]/div[4]      #選擇開始日期
+select addon enddatee       #選擇附加方案結束日期
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[3]/div[1]/div/div[2]/div/div/input        #點擊enddate 的欄位
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[3]/div[1]/div/div[2]/div[2]/div/div[2]/div[2]/div[5]/div[6]    #選結束日期
+
+addon base price        #設定附加方案基本費率
+    Input text   xpath=//*[@id="app"]/div/div/div/div/div[5]/div/input      ${Price249}
+save addon      #儲存附加方案
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[6]/button[1]
+    sleep   5s
+addon status    #檢視儲存結果
+    ${current language}    get text  xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/a      #擷取語系字串
+    ${addon message}    get text  xpath=/html/body/div/div/div[1]/div/div/div[2]       #擷取儲存結果字串
+    Run Keyword If      '${current language}' == '${language1}'    should be equal as strings   ${addon string1}    ${addon message}
+    ...  ELSE   should be equal as strings    ${addon string2}     ${addon message}
+    #plan string1 中文,plan string2 英文. 先比對language 1中文, 2英文.以中文為基準如果為中文就比對中文訊息,如不是則反之
+#    should be equal as strings    ${addon string}     ${addon message}             #比對預設成功與儲存結果字串
+close addon message     #關閉附加方案儲存結果訊息
+    click element    xpath=/html/body/div/div/div[1]/div/div/div[3]/button
+
+
+Check add addon success
+    ${addonname}     get value    xpath=//*[@id="app"]/div/div/div/div/div[1]/div/input
+    click element   xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[4]/a  #Click 編輯方案項目
+    click element   xpath=//*[@id="app"]/div/div/div/div/div[1]/div/select/option[2]    #click 方案類型並選加值服務
+    sleep  5s
+    Input text     xpath=//*[@id="app"]/div/div/div/div/div[3]/div[1]/input     ${addonname}
+    sleep  2s
+    click element   xpath=//*[@id="app"]/div/div/div/div/div[3]/div[2]/button
+    sleep  2s
+    wait until element is visible       //*[@id="app"]/div/div/div/div/div[4]   timeout=150
+    ${current addonname}    get text    xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr/td[2]
+    ${current addonname}=   Convert to string  ${current addonname}
+    ${addonname}=   Convert to string  ${addonname}
+    should be equal as strings       ${addonname}    ${current addonname}
+    Capture page screenshot
