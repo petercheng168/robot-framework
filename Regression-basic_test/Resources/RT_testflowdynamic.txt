@@ -1,0 +1,36 @@
+*** Settings ***
+#Resource  ../Regression-basic_test/Resources/RT_login.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_add_plan.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_add_addon.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_add_promotion.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_edit.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_dynamic.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_unitprice.txt
+Library  Selenium2Library
+### Test steps
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_login.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_plan.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_addon.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_promotion.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_edit.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_dynamic.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_unitprice.txt
+*** Variables ***
+
+*** Keywords ***
+set dynamic
+    Click dynamic       #點擊動態費率設定
+    Add dynamic-Expected average   #輸入預期平均比率
+    Add dynamic-Minimum    #輸入最小比率
+    Add dynamic-Maximum    #輸入最大比
+    Add dynamic-Critical   #輸入關鍵比率
+    Add dynamic-The percentage Critical     #大於等於關鍵比率的百分比
+    Select dynamic effective date       #選擇日期
+    Save dynamic        #儲存動態費率設定
+    Dynamic status      #檢視儲存結果
+    close dynamic message     #關閉附加方案儲存結果訊息
+    sleep   2s
+dynamic success
+    Reload Page
+    sleep   2s
+    Check set success

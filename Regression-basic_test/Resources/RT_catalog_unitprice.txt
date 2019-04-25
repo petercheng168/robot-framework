@@ -1,0 +1,13 @@
+*** Settings ***
+Library  Selenium2Library
+*** Variables ***
+${URL}  http://10.6.1.48:8080/login
+${BROWSER}  chrome
+${USERNAME}  dev.billing_admin@gogoro.com
+${PASSWORD}  123
+*** Keywords ***
+
+click unitprice
+    Click Element    xpath=//*[@id="app"]/div/div/aside/nav/ul/ul[1]/a[6]
+    Sleep   2s
+

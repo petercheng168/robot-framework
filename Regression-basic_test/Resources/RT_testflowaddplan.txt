@@ -1,0 +1,81 @@
+*** Settings ***
+#Resource  ../Regression-basic_test/Resources/RT_login.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_add_plan.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_add_addon.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_add_promotion.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_edit.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_dynamic.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_unitprice.txt
+Library  Selenium2Library
+### Test steps
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_login.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_plan.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_addon.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_promotion.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_edit.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_dynamic.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_unitprice.txt
+*** Variables ***
+
+*** Keywords ***
+#logintest       #登入功能 role:admin
+#    login
+#    input ac
+#    input pw
+#    click btn
+#switch menu
+#    click addesplan
+#    click addaddon
+#    click addpromotion
+#    click dynamic
+#    click unitprice
+#    click edit
+add plan   #新增資費 1199 3Y
+    click addesplan
+    switch plan product type
+    Input plan name
+    select plan startdate
+    slelect plan enddate
+    switch charge type
+    plan base price
+    Package select-addon
+    term and penalty
+    save plan
+    plan status
+    close plan message
+    sleep  3s
+    Check add plan success1
+
+add plan2   #新增資費 1199 2Y
+#    Reload Page
+#    discard  #如果不是一次建立完plan 則不需要此按鍵
+    click element    xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[1]/a
+    sleep   2s
+    Input plan name2
+    select plan startdate
+    slelect plan enddate
+    switch charge type
+    plan base price
+    term and penalty2
+    save plan
+    plan status
+    close plan message
+    sleep  2s
+    Check add plan success1
+
+add plan3   #新增資費 1199 3M
+#    Reload Page
+#    discard  #如果不是一次建立完plan 則不需要此按鍵
+    click element    xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[1]/a
+    sleep   2s
+    Input plan name3
+    select plan startdate
+    slelect plan enddate
+    switch charge type
+    plan base price
+    term and penalty3
+    save plan
+    plan status
+    close plan message
+    sleep  5s
+    Check add plan success1

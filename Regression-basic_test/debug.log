@@ -1,0 +1,6 @@
+[0315/153415.314:ERROR:file_io_win.cc(170)] CreateFile C:\Users\PETERY~1.CHE\AppData\Local\Temp\scoped_dir174452_27204\Crashpad\reports\86b124a6-07fc-401e-90a2-4d3f0659a9ae.dmp: 系統找不到指定的路徑。 (0x3)
+[0315/153415.338:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0410/154855.928:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0410/164859.686:ERROR:file_io_win.cc(161)] CreateFile C:\Users\PETERY~1.CHE\AppData\Local\Temp\scoped_dir518448_31712\Crashpad\settings.dat: 系統找不到指定的路徑。 (0x3)
+[0410/164859.731:ERROR:file_io_win.cc(170)] CreateFile C:\Users\PETERY~1.CHE\AppData\Local\Temp\scoped_dir518448_31712\Crashpad\reports\3e1ed5b9-28c8-48e1-8f13-b13158346c03.dmp: 系統找不到指定的路徑。 (0x3)
+[0410/164859.731:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed

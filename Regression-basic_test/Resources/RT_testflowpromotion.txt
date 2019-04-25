@@ -1,0 +1,81 @@
+*** Settings ***
+#Resource  ../Regression-basic_test/Resources/RT_login.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_add_plan.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_add_addon.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_add_promotion.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_edit.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_dynamic.txt
+#Resource  ../Regression-basic_test/Resources/RT_catalog_unitprice.txt
+Library  Selenium2Library
+### Test steps
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_login.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_plan.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_addon.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_add_promotion.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_edit.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_dynamic.txt
+Resource  C:/Users/peter.yf.cheng/PycharmProjects/Regression_test/Regression-basic_test/Resources/RT_catalog_unitprice.txt
+*** Variables ***
+
+*** Keywords ***
+
+add promotion1
+    click addpromotion
+    add promotion name1
+    add promotion startdate
+    add promotion enddate
+    price info-free
+    save promotion
+    promotion status
+    close promotion message
+    Check add promotion success
+add promotion2
+    Click Element    xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[3]/a
+    click addpromotion
+    Reload Page
+    sleep   5s
+    add promotion name2
+    add promotion startdate
+    add promotion enddate
+    price info-deduct
+    save promotion
+    promotion status
+    close promotion message
+    Check add promotion success
+add promotion3
+    Click Element    xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[3]/a
+    click addpromotion
+    Reload Page
+    sleep   5s
+    add promotion name3
+    add promotion startdate
+    add promotion enddate
+    price info-discount
+    save promotion
+    promotion status
+    close promotion message
+    Check add promotion success
+add promotion4
+    Click Element    xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[3]/a
+    Reload Page
+    sleep   2s
+    add promotion name4
+    add promotion startdate
+    add promotion enddate
+    price info-grant
+    save promotion
+    promotion status
+    close promotion message
+    Check add promotion success
+add promotion5
+    Click Element    xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[3]/a
+    Reload Page
+    sleep   2s
+    add promotion name5
+    add promotion startdate
+    add promotion enddate
+    price info-free maintenance
+    save promotion
+    promotion status
+    close promotion message
+    Check add promotion success

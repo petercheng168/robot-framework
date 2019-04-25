@@ -1,0 +1,135 @@
+*** Settings ***
+Resource  ../Regression-basic_test/Resources/RT_loginflow.txt
+Resource  ../Regression-basic_test/Resources/RT_testflowaddplan.txt
+Resource  ../Regression-basic_test/Resources/RT_testflowaddon.txt
+Resource  ../Regression-basic_test/Resources/RT_testflowpromotion.txt
+Resource  ../Regression-basic_test/Resources/RT_testflowedit.txt
+Resource  ../Regression-basic_test/Resources/RT_testflowdynamic.txt
+Resource  ../Regression-basic_test/Resources/RT_testflowuniprice.txt
+Library  Selenium2Library
+Library  Process
+Library  OperatingSystem
+Library  String
+#Library  SeleniumScreenshots
+*** Variables ***
+#${URL}  http://10.6.1.48:8080/login     #dev-env
+${URL}  http://pa-billing2.gogoro.com     #pa-env
+${BROWSER}  chrome
+#${USERNAME}  dev.billing_admin@gogoro.com    #dev-account
+${USERNAME}   pa.billing_admin@gogoro.com       #pa-account
+${PASSWORD}  123
+${language1}     繁體中文
+${language2}     ENGLISH
+*** Keywords ***
+login
+    Open Browser    ${URL}  ${BROWSER}
+    Wait Until Element Is Visible    //*[@id='app']/div/div/div/div/div/form/div[1]/input       timeout=1500
+    Maximize Browser Window
+   #找到Gogoro sys test page 的account textbox 並click
+    Wait Until Element Is Visible    xpath=//*[@id='app']/div/div/div/div/div/form/div[1]/input     timeout=1500
+    Click Element    xpath=//*[@id='app']/div/div/div/div/div/form/div[1]/input
+    Sleep    2s
+input ac
+   #輸入account
+    Input Text    xpath=//*[@id='app']/div/div/div/div/div/form/div[1]/input   ${USERNAME}  #輸入account
+input pw
+   #輸入password
+    Input Text    xpath=//*[@id='app']/div/div/div/div/div/form/div[2]/input    ${PASSWORD}   #輸入password
+click btn
+   #點擊 login button 登入並確認web title
+    ${title_1}    Get Title
+    Sleep   2s
+    Click Button     xpath=//*[@id='app']/div/div/div/div/div/form/div[3]/button  #點擊login button
+    Sleep    2s
+    ${title_2}    Get Title
+    should contain    ${title_2}    ${title_1}    #確認web title 是否一致
+   #確認成功進入頁面
+    Wait Until Element Is Visible    xpath=//*[@id="app"]/div/aside/h1
+Select correct language1
+    click element   xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/a       #選擇語言
+    sleep  2s
+    click element   xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/div/button[2]   # 選擇繁體中文
+    #select language1
+Select correct language2
+    click element   xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/a       #選擇語言
+    sleep  2s
+    click element   xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/div/button[1]   # 選擇English
+    #select language1
+Click language combobox
+    ${current language}    get text  xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/a      #擷取語系字串
+    should be equal as strings    ${current language}     ${language1}             #比對預設成功與儲存結果字串
+#    ${right} = should be equal as strings    ${current language}     ${language1}           #比對預設成功與儲存結果字串
+#    Run Keyword If      '${current language}' == '${language1}'      Select correct language2
+#    Run Keyword If      '${current language}' == '${language2}'      Select correct language1
+#    ...  ELSE   Select correct language2
+
+    [tags]  select language (default is traditional chinese)
+
+
+*** Test Cases ***
+Test-Jenkins
+    login
+    input ac
+    input pw
+    click btn
+    Click language combobox
+
+
+#RT_testcase01
+#    logintest
+#    sleep   2s
+#    [Tags]  Login function test
+#RT_testcase02-1  #正向 新增1199 3Y 的資費並確認成功新建立的方案
+#    add plan
+#    sleep   2s
+#    [Tags]  create 1199 3Y 資費
+#RT_testcase02-2  #正向 新增1199 2Y 的資費並確認成功新建立的方案
+#    add plan2
+#    sleep   2s
+#    [Tags]  create 1199 2Y 資費
+#RT_testcase02-3  #正向 新增1199 3M 的資費並確認成功新建立的方案
+#    add plan3
+#    sleep   2s
+#    [Tags]  create 1199 3M 資費
+#RT_testcase03-1  #正向 新增addon 附加方案 249
+#    addaddon
+#    sleep  2s
+#    [Tags]  create addon 附加方案 249
+#
+#RT_testcase04-1  #正向 新增promotion 促銷方案 每月免費100 KM
+#    add promotion1
+#    sleep   2s
+#    [Tags]  create promotion free 每月免費100 KM
+#test08  #正向 新增promotion 促銷方案 每月扣除100元
+#    add promotion2
+#    sleep   2s
+#    [Tags]  create promotion deduct 每月扣除100元
+#test09  #正向 新增promotion 促銷方案 每月折扣5%
+#    add promotion3
+#    sleep   2s
+#    [Tags]  create promotion discount 每月折扣5%
+#test10  #正向 新增promotion 促銷方案 每月發放100點
+#    add promotion4
+#    sleep   2s
+#    [Tags]  create promotion grant 每月發放100點
+#test11  #正向 新增promotion 促銷方案 每月免費定期保養
+#    add promotion5
+#    sleep   2s
+#    [Tags]  create promotion free regular maintemance 每月免費定期保養
+#
+#
+#test12  #正向 檢視plan編輯項目
+#    select edit-plan Criteria
+#    sleep   2s
+#    [Tags]  Edit plan 搜尋資費項目 (全部,已發佈,未發佈)
+
+#test13   #正向 設定動態費率
+##    logintest
+#    sleep   2s
+#    set dynamic
+#    dynamic success
+#    [Tags]  Dynamic success
+#    [Teardown]    Close All Browsers
+#test14
+#    dynamic success
+#    [Tags]  Dynamic success

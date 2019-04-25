@@ -1,0 +1,157 @@
+*** Settings ***
+Library  Selenium2Library
+Library  String
+Library  Screenshot
+Library  SeleniumScreenshots
+*** Variables ***
+${plan11993y}  1199 3年
+${plan11992y}  1199 2年
+${plan11993m}  1199 3月
+${Price1199}    1199
+${Service_fee}  100
+${trem 3y}  36
+${trem 2y}  24
+${trem 3m}  3
+#${plan string}   資費方案 存取結果: success         #dev-env
+${plan string1}   電池服務資費方案 存取結果: success   #pa-env (chinese)
+${plan string2}   Network Plan Save Results: success     #pa-env (eng)
+${planname}
+${penalty1}  500
+${language1}     繁體中文
+${language2}     ENGLISH
+*** Keywords ***
+
+click addesplan         #點擊Menu 的Add ES plan
+    wait until element is visible       xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[1]/a
+    click element    xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[1]/a
+    wait until element is visible  xpath=//*[@id="app"]/div/div/div/div/h2
+    Sleep  2s
+switch plan product type      #切換raido button 功能確認
+    Click Element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[1]/div/div/div[2]/label    #切換到 Business 商業
+    sleep  2s
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[1]/div/div/div[1]/label     #切換到 Personal 個人
+    sleep  2s
+# Add ES plan 測試 ,  新增 1199 3Y 資費
+#************************************************1199 3年*********************************************************#
+Select country
+    click element   //*[@id="app"]/div/div/div/div/form[1]/div[2]/div[1]/div/select/option[1]
+Input plan name      #輸入plan name
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[3]/div/div/input
+#    ${numbers}=    Evaluate    random.sample([unicode(x) for x in range(1, 11)], (4))    random
+#    ${numbers}=    Evaluate    random.sample(range(1, 11), 4)
+    ${numbers}=    Evaluate   random.randint(1000, 9999)    random
+    Input Text      xpath=//*[@id="app"]/div/div/div/div/form[1]/div[3]/div/div/input   ${plan11993y}${numbers}   #輸入1199 3年
+    sleep  1s
+    click element   //*[@id="app"]/div/div/div/div/form[1]/div[3]/div/div/label
+#    ${planname}     get value    xpath=//html/body/main/div/div/div/div/form[1]/div[3]/div/div/input
+#    log   ${planname}
+select plan startdate
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[4]/div[1]/div/div/div[2]/div/div/input    #點擊startdate 的欄位
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[4]/div[1]/div/div/div[2]/div[2]/div/div[2]/div[2]/div[1]/div[2]  #選擇日期
+slelect plan enddate
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[4]/div[2]/div/div/div[2]/div/div/input       #點擊enddate 的欄位
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[4]/div[2]/div/div/div[2]/div[2]/div/div[2]/div[2]/div[5]/div[6]  #選日期
+switch charge type      #切換KM 或AH
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[2]/div[1]/div/div/div[2]/label   #select AH
+    Wait until element is visible    //*[@id="app"]/div/div/div/div/form[2]/div[2]   timeout=150  #確認Charge Frequency顯示
+    sleep   2s
+    click Element   //*[@id="app"]/div/div/div/div/form[2]/div[1]/div/div/div[1]/label      #select KM
+    Wait until element is Not visible    //*[@id="app"]/div/div/div/div/form[2]/div[2]   timeout=150  #確認Charge Frequency消失
+plan base price
+    #輸入資費方案基本費率 Network Access Fee:
+    Input Text      xpath=//*[@id="app"]/div/div/div/div/form[2]/div[3]/div/div/div/div[2]/input   ${Price1199}   #輸入月租費
+    #輸入服務費 Topped Service Fee:
+    Input Text      xpath=//*[@id="app"]/div/div/div/div/form[2]/div[4]/div/div/div/div[2]/input  ${Service_fee}    #輸入服務費
+    sleep  2s
+Additional Charge
+
+Package select-addon
+    click element       xpath=//*[@id="app"]/div/div/div/div/form[3]/div[1]/div/div/div/div/div[1]
+    wait until element is visible      xpath=//*[@id="react-select-2-option-0"]
+    click element       xpath=//*[@id="react-select-2-option-0"]    #select addon
+    sleep  1s
+    click element       xpath=//*[@id="app"]/div/div/div/div/form[3]/div[2]/div/div/div/div/div[1]
+    wait until element is visible      xpath=//*[@id="react-select-3-option-0"]
+    click element       xpath=//*[@id="react-select-3-option-0"]    #select promotion
+
+term and penalty    #輸入條款訂閱期
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[4]/div[1]/div[1]      #開啟條款, 預設是關閉的
+    sleep   2s
+    Input Text      xpath=//*[@id="monthsToTerminate"]     ${trem 3y}      #輸入 36個月
+    sleep   2s
+    click element   xpath=//*[@id="app"]/div/div/div/div/form[4]/div[2]/div[1]/div[2]/label       #penalty enable
+    sleep  2s
+    Input Text      xpath=//*[@id="penaltyFee"]        ${penalty1}        #輸入Penalty
+save plan           #儲存資費方案
+    click Element    xpath=//*[@id="app"]/div/div/div/div/div/button[1]     #save 新增資費
+    sleep   5s
+plan status     #檢視資費方案儲存結果
+
+    ${current language}    get text  xpath=//*[@id="app"]/div/div/header/div/ul[2]/li[1]/a      #擷取語系字串
+    ${plan message}    get text  xpath=/html/body/div/div/div[1]/div/div/div[2]       #擷取儲存結果字串
+    Run Keyword If      '${current language}' == '${language1}'    should be equal as strings   ${plan string1}    ${plan message}
+    ...  ELSE   should be equal as strings    ${plan string2}     ${plan message}
+    #plan string1 中文,plan string2 英文. 先比對language 1中文, 2英文.以中文為基準如果為中文就比對中文訊息,如不是則反之
+
+close plan message      #關閉資費方案儲存結果訊息
+    Click Element    xpath=/html/body/div/div/div[1]/div/div/div[3]/button     #關閉Message
+
+Check add plan success1
+    ${planname}     get value    xpath=//html/body/main/div/div/div/div/form[1]/div[3]/div/div/input
+    click element   xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[4]/a      #Click 編輯方案項目
+    sleep  5s
+    Input text      xpath=//*[@id="app"]/div/div/div/div/div[3]/div[1]/input     ${planname}
+    sleep  2s
+    click element   xpath=//*[@id="app"]/div/div/div/div/div[3]/div[2]/button
+    sleep  2s
+    wait until element is visible       //*[@id="app"]/div/div/div/div/div[4]   timeout=150
+    ${current planname1}    get text    xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr/td[2]
+    ${current planname1}=   Convert to string  ${current planname1}
+    ${planname}=   Convert to string  ${planname}
+    should be equal as strings       ${planname}    ${current planname1}
+    Capture page screenshot
+#************************************************1199 2年*********************************************************#
+discard     #放棄全部項目->此動作將會清除全部欄位內容
+    click element       xpath=//*[@id="app"]/div/div/div/div/div/button[2]
+    Scroll Page To Location    0    0
+
+Input plan name2      #輸入plan name
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[3]/div/div/input
+    ${numbers}=    Evaluate   random.randint(1000, 9999)    random
+    Input Text      xpath=//*[@id="app"]/div/div/div/div/form[1]/div[3]/div/div/input   ${plan11992y}${numbers}   #輸入1199 2年
+    sleep  1s
+    click element   //*[@id="app"]/div/div/div/div/form[1]/div[3]/div/div/label
+#    ${planname2}     get text    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[3]/div/div/input
+#    log   ${planname2}
+term and penalty2       #輸入條款訂閱期
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[4]/div[1]/div[1]      #開啟條款, 預設是關閉的
+    sleep   2s
+    Input Text      xpath=//*[@id="monthsToTerminate"]     ${trem 2y}      #輸入 24個月
+
+
+#************************************************1199 3個月*******************************************************#
+Input plan name3      #輸入plan name
+
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[3]/div/div/input
+    ${numbers}=    Evaluate   random.randint(1000, 9999)    random
+    Input Text      xpath=//*[@id="app"]/div/div/div/div/form[1]/div[3]/div/div/input   ${plan11993m}${numbers}   #輸入1199 3個月
+    sleep  1s
+    click element   //*[@id="app"]/div/div/div/div/form[1]/div[3]/div/div/label
+#    ${planname3}     get text    xpath=//*[@id="app"]/div/div/div/div/form[1]/div[3]/div/div/input
+#    log   ${planname3}
+term and penalty3       #輸入條款訂閱期
+    click Element    xpath=//*[@id="app"]/div/div/div/div/form[4]/div[1]/div[1]     #開啟條款, 預設是關閉的
+    sleep   2s
+    Input Text      xpath=//*[@id="monthsToTerminate"]      ${trem 3m}      #輸入 3個月
+
+#********************************************確認確認成功新建立的方案*********************************************#
+#Check add plan success1
+#    click element   xpath=//*[@id="app"]/div/aside/nav/ul/li[1]/ul/li[4]/a
+##    Wait until element is visible       xpath=//*[@id="app"]/div/div/div/div/h2     timeout=150
+#    sleep  5s
+##    click element   xpath=//*[@id="app"]/div/div/div/div/div[2]/div[1]/select/option[3]
+#    Input Text      xpath=//*[@id="app"]/div/div/div/div/div[2]/div[1]/select/option[3]     ${planname1}
+#    sleep  2s
+#    click element   xpath=//*[@id="app"]/div/div/div/div/div[3]/div[2]/button
+#    ${current planname1}    get text    xpath=//*[@id="app"]/div/div/div/div/div[4]/div/div/div/table/tbody/tr/td[2]
+#    should not be equal as integers     ${planname1}    ${current planname1}

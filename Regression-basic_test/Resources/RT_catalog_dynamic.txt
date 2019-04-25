@@ -1,0 +1,68 @@
+*** Settings ***
+Library  Selenium2Library
+*** Variables ***
+${Expected average}  1.2
+${Minimum}  1.1
+${Maximum}  0.9
+${Critical}  1
+${The percentage Critical}  2
+${dynamic string}     Your Dynamic Rate Config Setting is Saved and will be effective by 2019/01/31 00:00:00
+${dynamic string1}     Your Dynamic Rate Config Setting is Saved and will be effective by 2019/01/30 00:00:00
+${date string}      未來 2019/01/31
+${date string1}      未來 2019/01/30
+*** Keywords ***
+
+Click dynamic       #點擊動態費率設定
+    Click Element    xpath=//*[@id="app"]/div/div/aside/nav/ul/ul[1]/a[5]
+    Sleep   2s
+    wait until element is visible    xpath=//*[@id="app"]/div/div/div/div/h2    timeout=150
+Add dynamic-Expected average
+    Input text  xpath=//*[@id="app"]/div/div/div/div/div[2]/div/input   ${Expected average}     #輸入預期平均比率
+
+Add dynamic-Minimum
+    Input text  xpath=//*[@id="app"]/div/div/div/div/div[3]/div/input   ${Minimum}      #輸入最小比率
+
+Add dynamic-Maximum
+    Input text  xpath=//*[@id="app"]/div/div/div/div/div[4]/div/input   ${Maximum}      #輸入最大比率
+
+Add dynamic-Critical
+    Input text  xpath=//*[@id="app"]/div/div/div/div/div[5]/div/input  ${Critical}      #輸入關鍵比率
+
+Add dynamic-The percentage Critical
+    Input text  xpath=//*[@id="app"]/div/div/div/div/div[6]/div/input  ${The percentage Critical}     #大於等於關鍵比率的百分比
+
+Select dynamic effective date       #選擇日期
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[7]/div/div/div[2]/div/div/input      #點擊有效日期欄位
+#    click element    xpath=//*[@id="app"]/div/div/div/div/div[7]/div/div/div[2]/div[2]/div/div[2]/div[2]/div[5]/div[4]     #選擇日期 0130
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[7]/div/div/div[2]/div[2]/div/div[2]/div[2]/div[5]/div[5]     #選擇日期 0131
+Save dynamic        #儲存動態費率設定
+    click element    xpath=//*[@id="app"]/div/div/div/div/div[8]/div/button[1]
+    sleep  2s
+Dynamic status      #檢視儲存結果
+    ${dynamic message}    get text  xpath=/html/body/div/div/div[1]/div/div/div[2]       #擷取儲存結果字串
+    should be equal as strings    ${dynamic string}     ${dynamic message}           #比對預設成功與儲存結果字串
+#    should be equal as strings    ${dynamic string1}     ${dynamic message}           #比對預設成功與儲存結果字串
+close dynamic message     #關閉附加方案儲存結果訊息
+    click element    xpath=/html/body/div/div/div[1]/div/div/div[3]/button
+
+#***************************************Check Future Date*********************************************#
+Check set success
+    ${date message}    get text  xpath=//*[@id="app"]/div/div/div/div/div[1]/label[4]       #擷取儲存結果字串
+    should be equal as strings    ${date string}     ${date message}           #比對預設成功與儲存結果字串
+#    should be equal as strings    ${date string1}     ${date message}           #比對預設成功與儲存結果字串
+
+
+#******************************Check Future Date then select insert date******************************#
+Check future date1
+    ${date message}    get text  xpath=//*[@id="app"]/div/div/div/div/div[1]/label[4]       #擷取儲存結果字串
+    should be equal as strings    ${date string}     ${date message}           #比對預設成功與儲存結果字串
+#    should be equal as strings    ${date string1}     ${date message}           #比對預設成功與儲存結果字串
+
+Dynamic status1      #檢視儲存結果
+    ${date message}    get text  xpath=//*[@id="app"]/div/div/div/div/div[1]/label[4]       #擷取未來日期
+    run keyword if
+    ${dynamic message}    get text  xpath=/html/body/div/div/div[1]/div/div/div[2]       #擷取儲存結果字串
+    should be equal as strings    ${dynamic string}     ${dynamic message}           #比對預設成功與儲存結果字串
+#    should be equal as strings    ${dynamic string1}     ${dynamic message}           #比對預設成功與儲存結果字串
+close dynamic message1     #關閉附加方案儲存結果訊息
+    click element    xpath=/html/body/div/div/div[1]/div/div/div[3]/button

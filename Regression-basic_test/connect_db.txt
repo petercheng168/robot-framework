@@ -1,0 +1,39 @@
+*** Settings ***
+Library   DatabaseLibrary
+Library   Collections
+*** Variables ***
+${Port}           3306
+${DB_Name}        Go_Platform
+${DB_Username}    pa_user
+${DB_Password}    xKA2UrV%6_US*wG3
+${DB_host}        10.4.47.11
+@{QueryResult}
+#${RowCount}       ${EMPTY}
+
+*** Keywords ***
+Connect To Database And Log In
+    Connect To Database    pymysql    ${DB_Name}    ${DB_Username}    ${DB_Password}    ${DB_host}    ${Port}
+
+*** Test Cases ***
+Connecting
+
+    Connect To Database And Log In
+#    @{QueryResult}  table_name    SELECT * FROM tbl_scooter Limit 10
+    @{QueryResult}  Query    SELECT * FROM tbl_scooter Limit 10
+    Log Many  @{QueryResult}
+    # $是全部資料寫在一起, @會將資料分筆列出
+
+
+#
+#test case11
+#    ${d}    Evaluate    random.randint(1000, 9999)    random
+#    log    ${d}
+
+
+
+#connecting
+#    Connect To Database Using Custom Params    pymysql    db='PA', user='pa_user', password='xKA2UrV%6_US*wG3', host='10.4.47.11', port=3306
+#
+#    @{QueryResult}     Query    select * from TableName
+#    log to console   @{QueryResult}
+
